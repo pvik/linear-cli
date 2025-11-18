@@ -45,6 +45,7 @@ func (l Linear) CreateIssue(
 	assigneeId string,
 	stateId string,
 	priority int,
+	projectId string,
 	labelsIds []string,
 ) IssueDetailNode {
 	client := l.getClient()
@@ -56,6 +57,7 @@ func (l Linear) CreateIssue(
 		"assigneeId":  assigneeId,
 		"stateId":     stateId,
 		"priority":    priority,
+		"projectId":   projectId,
 		"labelIds":    labelsIds,
 	}
 
@@ -63,7 +65,7 @@ func (l Linear) CreateIssue(
 		IssueCreate struct {
 			Success bool
 			Issue   IssueDetailNode
-		} `graphql:"issueCreate(input: {title: $title, description: $description, teamId: $teamId, assigneeId: $assigneeId, stateId: $stateId, priority: $priority, labelIds: $labelIds})"`
+		} `graphql:"issueCreate(input: {title: $title, description: $description, teamId: $teamId, assigneeId: $assigneeId, stateId: $stateId, projectId: $projectId, priority: $priority, labelIds: $labelIds})"`
 	}
 
 	err := client.WithDebug(true).Mutate(context.Background(), &mutateIssue, variables)

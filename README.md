@@ -8,11 +8,29 @@ The goal is to improve adoption of Linear.app by devs who have a heavy terminal-
 This allows for devs to quickly create issues for new tasks they may be starting work on, and also automatically create a new local git branch for the linear issue (and switch into it).
 This also provides an easy way to switch to git branch for a linear issue.
 
+### Installation 
+
+- Grab pre-built binary from [here](https://github.com/pvik/linear-cli/releases).
+- Extract the archive
+
+##### OSX 
+
+- Copy the binary to a location that's included in your `$PATH`
+  - If you're using homebrew, you can copy the binary to `/opt/homebrew/bin/`
+- OSX requires binaries to be signed, to do this, run the following in your terminal: 
+
+```sh
+$ sudo xattr -dr com.apple.quarantine /opt/homebrew/bin/lin
+$ sudo codesign -s - --deep --force /opt/homebrew/bin/lin
+```
+
 ## Usage 
 
 ### Configuration
 
-XDG Config location is honored. In Linux/Mac this should be `~/.config/linear-cli/config.toml` 
+XDG Config location is honored. 
+In Linux this should be `~/.config/linear-cli/config.toml` 
+In Mac this should be `~/Library/Application Data/linear-cli/config.toml`
 
 This file holds your Linear.app API Key. 
 You can create a Personal API Key in Settings > Security & access
@@ -35,6 +53,7 @@ default_team = "Engineering"
 team = "Engineering"
 priority = 3
 status = "Todo"
+project = "Data"
 labels = ["Backend Team"]
 ```
 
@@ -144,19 +163,19 @@ OPTIONS:
 - Create a new issue ; create a new git-branch for issue and switch to it: (all below are equivalent)
 
 ```
-lin new issue --team="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --git-create-branch 
+lin new issue --team="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --project=Data --git-create-branch 
 ```
 
 ```
-lin touch is --tm="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --g-cb
+lin touch is --tm="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --prj=Data --g-cb
 ```
 
 ```
-lin mk is --tm="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --g-cb
+lin mk is --tm="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --prj=Data --g-cb
 ```
 
 ```
-lin mk i --tm="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --g-cb
+lin mk i --tm="Engineering" --title="test issue" --label="Backend Team" --label="Improvement" --priority=3 --status="Todo" --prj=Data --g-cb
 ```
 
 
