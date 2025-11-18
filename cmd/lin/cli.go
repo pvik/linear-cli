@@ -161,6 +161,7 @@ func (a App) ParseCLIParams() {
 							&cli.StringSliceFlag{Name: "label", Value: a.ProjectConfig.DefaultIssueTemplate.Labels},
 							&cli.IntFlag{Name: "priority", Value: a.ProjectConfig.DefaultIssueTemplate.Priority},
 							&cli.StringFlag{Name: "status", Value: a.ProjectConfig.DefaultIssueTemplate.Status},
+							&cli.StringFlag{Name: "project", Aliases: []string{"prj"}, Value: a.ProjectConfig.DefaultIssueTemplate.Project},
 							&cli.BoolFlag{Name: "git-create-branch", Aliases: []string{"g-cb"}, Usage: "Create a new git branch for Issue, and switch to it."},
 						},
 
@@ -181,12 +182,15 @@ func (a App) ParseCLIParams() {
 							priority := cmd.Int("priority")
 
 							status := cmd.String("status")
-							if cmd.IsSet("priority") {
-								priority = cmd.Int("priority")
-							}
 							stateId := ""
 							if status != "" {
 								stateId = a.getTeamStateId(teamId, status, true)
+							}
+
+							project := cmd.String("project")
+							projectId := ""
+							if project != "" {
+								projectId = a.getProjectId(project, true)
 							}
 
 							labels := cmd.StringSlice("label")
@@ -198,7 +202,7 @@ func (a App) ParseCLIParams() {
 							myId := a.getMyId()
 
 							c := linear.Linear{ApiKey: a.LinearAPIToken}
-							issue := c.CreateIssue(teamId, title, "", myId, stateId, priority, labelsIds)
+							issue := c.CreateIssue(teamId, title, "", myId, stateId, priority, projectId, labelsIds)
 
 							log.Info().Msgf("Created new issue: %s", issue.Identifier)
 							detailIssue(issue)

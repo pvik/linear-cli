@@ -3,6 +3,7 @@ package git
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/go-git/go-git/v6"
 	"github.com/go-git/go-git/v6/plumbing"
@@ -10,18 +11,34 @@ import (
 )
 
 func getCWDRepo() *git.Repository {
-	path, err := os.Getwd()
+	cwd, err := os.Getwd()
 	if err != nil {
 		log.Fatal().Err(err).Msg("Unable to get CWD")
 	}
 
-	// We instantiate a new repository targeting the given path (the .git folder)
-	r, err := git.PlainOpen(path)
-	if err != nil {
-		log.Fatal().Err(err).Msg("Unable to open git repo")
+	found := false
+	path := cwd
+
+	if !found {
+		for _ = range 4 {
+
+			r, err := git.PlainOpen(path)
+			if err != nil {
+				log.Debug().Err(err).Msg("Unable to open git repo")
+
+				path = filepath.Join(path, "..")
+				continue
+			}
+
+			return r
+
+		}
 	}
 
-	return r
+	log.Fatal().Str("path", cwd).Msg("Unable to open git repo")
+
+	return nil
+
 }
 
 func getBranchRefName(branchName string) plumbing.ReferenceName {

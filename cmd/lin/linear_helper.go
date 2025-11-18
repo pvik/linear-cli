@@ -41,6 +41,23 @@ func (a App) getTeamStateId(teamId string, stateName string, raiseOnNotFound boo
 	return ""
 }
 
+func (a App) getProjectId(projectName string, raiseOnNotFound bool) string {
+	c := linear.Linear{ApiKey: a.LinearAPIToken}
+	projects := c.QueryProjects()
+
+	for _, project := range projects {
+		if project.Name == projectName {
+			return project.Id
+		}
+	}
+
+	if raiseOnNotFound {
+		log.Fatal().Msg(fmt.Sprintf("Invalid Project (%s) provided.", projectName))
+	}
+
+	return ""
+}
+
 func (a App) getIssueLabelsIds(labels []string, raiseOnNotFound bool) []string {
 	c := linear.Linear{ApiKey: a.LinearAPIToken}
 	srvLabels := c.QueryIssueLabels(true)
