@@ -12,7 +12,7 @@ func (l Linear) QueryProjects() []ProjectNode {
 	var queryProjects struct {
 		Projects struct {
 			Nodes []ProjectNode
-		} `graphql:"projects(orderBy: updatedAt, filter: {and: [{status: {name: {neq: \"Completed\"}}}]})"`
+		} `graphql:"projects(orderBy: createdAt, filter: {and: [{status: {name: {neq: \"Completed\"}}}]})"`
 	}
 
 	err := client.Query(context.Background(), &queryProjects, nil)

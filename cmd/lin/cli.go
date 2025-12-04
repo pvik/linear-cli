@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"os"
+	"pvik/linear-cli/internal/ui"
 	"pvik/linear-cli/pkg/git"
 	"pvik/linear-cli/pkg/linear"
 
@@ -137,6 +138,7 @@ func (a App) ParseCLIParams() {
 							issue := c.QueryIssue(issueId)
 
 							detailIssue(issue)
+
 							return nil
 						},
 					},
@@ -189,6 +191,10 @@ func (a App) ParseCLIParams() {
 
 							project := cmd.String("project")
 							projectId := ""
+							if project == "" {
+								projects := a.getProjectsList()
+								project = ui.SelectItem(projects, true)
+							}
 							if project != "" {
 								projectId = a.getProjectId(project, true)
 							}
@@ -200,6 +206,8 @@ func (a App) ParseCLIParams() {
 							}
 
 							myId := a.getMyId()
+
+							return nil
 
 							c := linear.Linear{ApiKey: a.LinearAPIToken}
 							issue := c.CreateIssue(teamId, title, "", myId, stateId, priority, projectId, labelsIds)
