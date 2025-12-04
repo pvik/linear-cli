@@ -58,6 +58,19 @@ func (a App) getProjectId(projectName string, raiseOnNotFound bool) string {
 	return ""
 }
 
+func (a App) getProjectsList() []string {
+	c := linear.Linear{ApiKey: a.LinearAPIToken}
+	projects := c.QueryProjects()
+
+	ret := []string{}
+
+	for _, project := range projects {
+		ret = append(ret, project.Name)
+	}
+
+	return ret
+}
+
 func (a App) getIssueLabelsIds(labels []string, raiseOnNotFound bool) []string {
 	c := linear.Linear{ApiKey: a.LinearAPIToken}
 	srvLabels := c.QueryIssueLabels(true)
